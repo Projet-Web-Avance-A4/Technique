@@ -1,3 +1,4 @@
+import { nextui } from '@nextui-org/theme';
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -5,9 +6,17 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/components/(button|card|dropdown|navbar|ripple|spinner|menu|divider|popover).js",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
+      colors: {
+        red: '#FA7070',
+        beige: '#FEFDED',
+        lightGreen: '#C6EBC5',
+        darkGreen: '#A1C398',
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -15,6 +24,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  darkMode: "class",
+  plugins: [nextui()],
 };
 export default config;

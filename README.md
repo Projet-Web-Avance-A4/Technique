@@ -20,6 +20,21 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+## Install NextUI
+
+To install NextUI, run in the command line:
+
+```bash
+npm install -g nextui-cli
+```
+
+Then (if you have imports problem), run:
+```bash
+npm install @nextui-org/react
+```
+
+More info about [NextUI](https://nextui.org/docs/guide/installation)
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
