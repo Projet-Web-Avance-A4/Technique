@@ -151,7 +151,7 @@ export default function AccountInfo() {
 
     const sendModifiedData = async () => {
         try {
-            const response = await fetch('http://localhost:3001/api/update', {
+            const response = await fetch('http://localhost:3001/api/auth/update', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -203,7 +203,7 @@ export default function AccountInfo() {
     const sendModifiedPassword = async () => {
         if (newPassword == confirmPassword) {
             try {
-                const response = await fetch('http://localhost:3001/api/update-password', {
+                const response = await fetch('http://localhost:3001/api/auth/update-password', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

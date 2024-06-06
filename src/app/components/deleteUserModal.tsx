@@ -14,7 +14,7 @@ const deleteUserModal: React.FC<deleteUserModalProps> = ({ isOpen, closeModal, u
 
     const handleDeleteAccount = async () => {
         try {
-            const response = await fetch('http://localhost:3001/api/delete', {
+            const response = await fetch('http://localhost:3001/api/auth/delete', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

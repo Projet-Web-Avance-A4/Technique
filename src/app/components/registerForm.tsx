@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from 'react';
 import { Alert } from '@mui/material';
 import { Input, Spacer, Button, Card, CardHeader, CardBody, Tooltip } from '@nextui-org/react';
@@ -17,7 +15,7 @@ const RegisterForm: React.FC<{ changeForm: () => void }> = (props) => {
     const [city, setCity] = useState('');
     const [postalCode, setPostalCode] = useState('');
     const [password, setPassword] = useState('');
-    const role = "Développeur";
+    const role = "Service Technique";
     const status = "Active";
     const code_referral = "REF" + generate(10);
     const [id_sponsor, setIdSponsor] = useState('');
@@ -40,7 +38,7 @@ const RegisterForm: React.FC<{ changeForm: () => void }> = (props) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:3001/api/register', {
+        const response = await fetch('http://localhost:3001/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
