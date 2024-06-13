@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { NextUIProvider } from '@nextui-org/system';
-import Header from '../components/header';
-import Footer from '../components/footer';
+import Header from '../components/header/header';
+import Footer from '../components/footer/footer';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import CustomCard from '../components/customcard';
+import CustomCard from '../components/customcard/customcard';
 
 interface User {
     name: string;

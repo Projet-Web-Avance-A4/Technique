@@ -40,7 +40,7 @@ export const handleSubmit = async (
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
 
-            window.location.href = '/telechargements';
+            window.location.href = '/accueil';
         } else {
             setAlertMessage('Échec de la connexion au compte');
             setAlertType('error');

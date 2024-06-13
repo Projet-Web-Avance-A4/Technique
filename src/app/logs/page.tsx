@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { NextUIProvider } from '@nextui-org/system';
-import Header from '../components/header';
-import Footer from '../components/footer';
-import LogsTable from '../components/logsTable';
+import Header from '../components/header/header';
+import Footer from '../components/footer/footer';
+import LogsTable from '../components/logsTable/logsTable';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Button } from '@nextui-org/react';
 
