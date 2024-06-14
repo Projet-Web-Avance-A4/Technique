@@ -2,35 +2,14 @@
 
 import { NextUIProvider } from "@nextui-org/system";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
-import Header from "../components/header";
+import Header from "../components/header/header";
 import { Button } from "@nextui-org/button";
 import { useEffect, useState, ChangeEvent } from "react";
-import jwt, { JwtPayload } from "jsonwebtoken";
 import { Input, Spacer } from "@nextui-org/react";
 import { Alert } from "@mui/material";
-import Footer from "../components/footer";
-
-interface User {
-    name: string;
-    surname: string;
-    street: string;
-    city: string;
-    postal_code: string;
-    phone: string;
-    mail: string;
-    role: string;
-}
-
-const fieldLabels: { [key in keyof User]: string } = {
-    name: 'Prénom',
-    surname: 'Nom',
-    street: 'Rue',
-    city: 'Ville',
-    postal_code: 'Code Postal',
-    phone: 'Téléphone',
-    mail: 'Mail',
-    role: 'Rôle'
-};
+import Footer from "../components/footer/footer";
+import { User, fieldLabels } from "../interfaces/user";
+import { isUserDataValid, handleTokenVerification, handleInputChange, sendModifiedData, sendModifiedPassword } from "./utils";
 
 export default function AccountInfo() {
     const [user, setUser] = useState<User | null>(null);
@@ -44,77 +23,8 @@ export default function AccountInfo() {
     const [isDataDisabled, setIsDataDisabled] = useState(true);
     const [isPasswordDisabled, setIsPasswordDisabled] = useState(true);
 
-    const generateNewAccessToken = (refreshToken: string) => {
-        try {
-            const decoded = jwt.verify(refreshToken, 'refresh_secret_jwt');
-            if (typeof decoded === 'object' && decoded !== null) {
-                const data: JwtPayload = decoded as jwt.JwtPayload;
-                const newAccessToken = jwt.sign({ ...data }, 'access_secret_jwt');
-                localStorage.setItem('accessToken', newAccessToken);
-                return newAccessToken;
-            } else {
-                console.error('decoded n\'est pas un objet JwtPayload');
-            }
-        } catch (error) {
-            console.error('Error generating new access token:', error);
-            throw error;
-        }
-    };
-
-    const verifyAndSetUser = (accessToken: string) => {
-        try {
-            const verifiedData = jwt.verify(accessToken, 'access_secret_jwt');
-            if (typeof verifiedData !== 'string') {
-                const data: JwtPayload = verifiedData;
-                const userData: User = {
-                    name: data.name ?? '',
-                    surname: data.surname ?? '',
-                    street: data.street ?? '',
-                    city: data.city ?? '',
-                    postal_code: data.postal_code ?? '',
-                    phone: data.phone ?? '',
-                    mail: data.mail ?? '',
-                    role: data.role ?? ''
-                };
-                setUser(userData);
-            }
-        } catch (error) {
-            console.error('Failed to parse access token or verify JWT:', error);
-            throw error;
-        }
-    };
-
-    const isUserDataValid = (user: User | null) => {
-        return user?.name && user?.surname && user?.street && user?.city && user?.postal_code && user?.phone && user?.mail;
-    };
-
     useEffect(() => {
-        const handleTokenVerification = () => {
-            let accessToken: string | null = localStorage.getItem('accessToken');
-            const refreshToken = localStorage.getItem('refreshToken');
-
-            if (!accessToken) {
-                console.error('No access token found in localStorage.');
-                return;
-            }
-
-            try {
-                verifyAndSetUser(accessToken);
-            } catch (error: any) {
-                if (error.name === 'TokenExpiredError' && refreshToken) {
-                    try {
-                        const newAccessToken = generateNewAccessToken(refreshToken);
-                        if (typeof newAccessToken === 'string') {
-                            accessToken = newAccessToken;
-                            verifyAndSetUser(accessToken);
-                        }
-                    } catch (refreshError) {
-                        console.error('Failed to refresh access token:', refreshError);
-                    }
-                }
-            }
-        };
-        handleTokenVerification();
+        handleTokenVerification(setUser);
     }, []);
 
     useEffect(() => {
@@ -127,57 +37,16 @@ export default function AccountInfo() {
         setIsPasswordDisabled(!isFormValid);
     }, [oldPassword, newPassword, confirmPassword]);
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        if (modifiedUser !== null) {
-            setModifiedUser({
-                ...modifiedUser,
-                [name]: value
-            });
-        } else {
-            setModifiedUser({
-                name: '',
-                surname: '',
-                street: '',
-                city: '',
-                postal_code: '',
-                phone: '',
-                mail: '',
-                role: '',
-                [name]: value
-            });
-        }
+    const handleInputChangeWrapper = (e: ChangeEvent<HTMLInputElement>) => {
+        handleInputChange(e, modifiedUser, setModifiedUser);
     };
 
-    const sendModifiedData = async () => {
-        try {
-            const response = await fetch('http://localhost:3001/api/auth/update', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: modifiedUser?.name,
-                    surname: modifiedUser?.surname,
-                    currentMail: user?.mail,
-                    newMail: modifiedUser?.mail,
-                    phone: modifiedUser?.phone,
-                    street: modifiedUser?.street,
-                    city: modifiedUser?.city,
-                    postalCode: modifiedUser?.postal_code
-                })
-            });
-            if (!response.ok) {
-                throw new Error('Failed to modify data');
-            }
+    const sendModifiedDataWrapper = () => {
+        sendModifiedData(modifiedUser, user, setUser);
+    };
 
-            const { accessToken, refreshToken } = await response.json();
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', refreshToken);
-            verifyAndSetUser(accessToken);
-        } catch (error) {
-            console.error('Failed to modify data:', error);
-        }
+    const sendModifiedPasswordWrapper = () => {
+        sendModifiedPassword(user, oldPassword, newPassword, confirmPassword, setAlertMessage, setAlertType);
     };
 
     const toggleEditMode = () => {
@@ -186,7 +55,6 @@ export default function AccountInfo() {
             setModifiedUser(user);
         }
     };
-
 
     const handleOldPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
         setOldPassword(e.target.value);
@@ -198,31 +66,6 @@ export default function AccountInfo() {
 
     const handleConfirmPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
         setConfirmPassword(e.target.value);
-    };
-
-    const sendModifiedPassword = async () => {
-        if (newPassword == confirmPassword) {
-            try {
-                const response = await fetch('http://localhost:3001/api/auth/update-password', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ mail: user?.mail, oldPassword, newPassword })
-                });
-                if (!response.ok) {
-                    setAlertMessage('Échec de la modification de mot de passe');
-                    setAlertType('error');
-                } else {
-                    setAlertMessage('Modification du mot de passe réussie');
-                    setAlertType('success');
-                }
-            } catch (error) {
-                console.error('Failed to modify password:', error);
-            }
-        } else {
-            console.error('Erreur de modification, veuillez réitérer')
-        }
     };
 
     return (
@@ -258,7 +101,7 @@ export default function AccountInfo() {
                                                         type="text"
                                                         name={field}
                                                         value={isEditing ? modifiedUser?.[field as keyof User] ?? '' : user?.[field as keyof User] ?? ''}
-                                                        onChange={handleInputChange}
+                                                        onChange={handleInputChangeWrapper}
                                                     />
                                                 ) : (
                                                     <div>
@@ -279,7 +122,7 @@ export default function AccountInfo() {
                                         onClick={() => {
                                             if (isEditing) {
                                                 if (modifiedUser) {
-                                                    sendModifiedData();
+                                                    sendModifiedDataWrapper();
                                                 }
                                                 toggleEditMode();
                                             } else {
@@ -364,7 +207,7 @@ export default function AccountInfo() {
                                         className="bg-beige shadow min-w-[150px]"
                                         isDisabled={isPasswordDisabled}
                                         onClick={() => {
-                                            sendModifiedPassword()
+                                            sendModifiedPasswordWrapper()
                                         }}
                                     >
                                         <svg

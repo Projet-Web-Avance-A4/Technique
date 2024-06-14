@@ -2,32 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { NextUIProvider } from '@nextui-org/system';
-import Header from '../components/header';
-import Footer from '../components/footer';
-import LogsTable from '../components/logsTable';
+import Header from '../components/header/header';
+import Footer from '../components/footer/footer';
+import LogsTable from '../components/logsTable/logsTable';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Button } from '@nextui-org/react';
-
-interface User {
-    name: string;
-    surname: string;
-    street: string;
-    city: string;
-    postal_code: string;
-    phone: string;
-    mail: string;
-    role: string;
-}
-
-interface Log {
-    id: number;
-    id_user: number;
-    name: string;
-    mail: string;
-    role: string;
-    type: string;
-    timestamp: string;
-}
+import { User } from '../interfaces/user';
+import { Log } from '../interfaces/log';
 
 const Logs: React.FC = () => {
 
@@ -60,7 +41,7 @@ const Logs: React.FC = () => {
     useEffect(() => {
         const fetchLogs = async () => {
             try {
-                const response = await fetch('http://localhost:3001/api/log/getLog', {
+                const response = await fetch('http://localhost:4000/log/getLog', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

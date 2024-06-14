@@ -2,10 +2,11 @@ import { Alert } from '@mui/material';
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardHeader, Input, Spacer } from '@nextui-org/react';
 import { NextUIProvider } from '@nextui-org/system';
-import React, { useEffect, useState } from 'react';
-import { EyeSlashFilledIcon } from '../../../public/EyeSlashFilledIcon';
-import { EyeFilledIcon } from '../../../public/EyeFilledIcon';
+import React, { useState } from 'react';
+import { EyeSlashFilledIcon } from '../../../../public/icons/EyeSlashFilledIcon';
+import { EyeFilledIcon } from '../../../../public/icons/EyeFilledIcon';
 import { FaUser } from "react-icons/fa6";
+import { useFormValidation, useToggleVisibility, handleSubmit } from './utils';
 
 const ConnectionForm: React.FC<{ changeForm: () => void }> = (props) => {
     const [mail, setMail] = useState('');
@@ -13,41 +14,10 @@ const ConnectionForm: React.FC<{ changeForm: () => void }> = (props) => {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState<'success' | 'error'>('success');
 
-    const [isVisible, setIsVisible] = React.useState(false);
-    const toggleVisibility = () => setIsVisible(!isVisible);
-    const [isDisabled, setIsDisabled] = useState(true);
+    const { isVisible, toggleVisibility } = useToggleVisibility();
+    const isDisabled = useFormValidation(mail, password);
 
-    useEffect(() => {
-        const isFormValid = mail && password;
-        setIsDisabled(!isFormValid);
-    }, [mail, password]);
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            const response = await fetch('http://localhost:3001/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ mail, password })
-            });
-
-            if (response.status === 200) {
-                const { accessToken, refreshToken } = await response.json();;
-                localStorage.setItem('accessToken', accessToken);
-                localStorage.setItem('refreshToken', refreshToken);
-
-                window.location.href = '/accueil';
-            } else {
-                setAlertMessage('Échec de la connexion au compte');
-                setAlertType('error');
-            }
-        } catch (error) {
-            setAlertMessage('Erreur lors de la connexion');
-            setAlertType('error');
-        }
-    };
+    const onSubmit = (e: React.FormEvent) => handleSubmit(e, mail, password, setAlertMessage, setAlertType);
 
     return (
         <NextUIProvider>
@@ -60,7 +30,7 @@ const ConnectionForm: React.FC<{ changeForm: () => void }> = (props) => {
                         </div>
                     </CardHeader>
                     <CardBody>
-                        <form onSubmit={handleSubmit} className="flex flex-col items-center gap-5 p-3">
+                        <form onSubmit={onSubmit} className="flex flex-col items-center gap-5 p-3">
                             <div className='w-8/12 mx-auto'>
                                 <Input
                                     className='text-black w-full'
@@ -116,7 +86,7 @@ const ConnectionForm: React.FC<{ changeForm: () => void }> = (props) => {
                     )}
                 </Card>
             </div>
-        </NextUIProvider >
+        </NextUIProvider>
     );
 };
 

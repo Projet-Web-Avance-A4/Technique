@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from 'react';
-import RegisterForm from './components/registerform';
-import ConnectionForm from './components/connectionForm';
+import RegisterForm from './components/registerForm/registerForm';
+import ConnectionForm from './components/connectionForm/connectionForm';
 import { NextUIProvider } from '@nextui-org/system';
-import Header from './components/header';
-import Footer from './components/footer';
+import Header from './components/header/header';
+import Footer from './components/footer/footer';
 
 const Register: React.FC = () => {
 

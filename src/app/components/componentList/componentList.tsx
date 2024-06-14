@@ -1,9 +1,5 @@
-// /app/components/ComponentList.tsx
 import React from 'react';
-
-interface ComponentListProps {
-  components: string[];
-}
+import { ComponentListProps } from '@/app/interfaces/card';
 
 const ComponentList: React.FC<ComponentListProps> = ({ components }) => {
   return (

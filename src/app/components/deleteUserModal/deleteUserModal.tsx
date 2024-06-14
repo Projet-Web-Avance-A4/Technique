@@ -1,36 +1,13 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Button, Input } from '@nextui-org/react';
-import { Fragment, useState } from 'react';
-
-interface deleteUserModalProps {
-    isOpen: boolean;
-    closeModal: () => void;
-    userMail?: string;
-}
+import { Fragment } from 'react';
+import { UsePassword, handleDeleteAccount } from './utils';
+import { deleteUserModalProps } from '@/app/interfaces/user';
 
 const deleteUserModal: React.FC<deleteUserModalProps> = ({ isOpen, closeModal, userMail }) => {
+    const { password, setPassword } = UsePassword();
 
-    const [password, setPassword] = useState('');
-
-    const handleDeleteAccount = async () => {
-        try {
-            const response = await fetch('http://localhost:3001/api/auth/delete', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ mail: userMail, password })
-            });
-            if (response.ok) {
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken')
-                window.location.href = '/';
-            } else {
-            }
-        } catch (error) {
-            console.error('Erreur lors de la suppression du compte :', error);
-        }
-    };
+    const onDeleteAccount = () => handleDeleteAccount(userMail, password);
 
     return (
         <Transition appear show={isOpen} as={Fragment}>
@@ -75,7 +52,7 @@ const deleteUserModal: React.FC<deleteUserModalProps> = ({ isOpen, closeModal, u
                             </div>
                             <div className="mt-6 flex justify-center">
                                 <div className="mr-2">
-                                    <Button onClick={handleDeleteAccount} className="bg-beige shadow min-w-[150px]">
+                                    <Button onClick={onDeleteAccount} className="bg-beige shadow min-w-[150px]">
                                         Confirmer
                                     </Button>
                                 </div>

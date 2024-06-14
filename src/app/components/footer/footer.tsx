@@ -1,7 +1,7 @@
 "use client";
 import { FaPhone, FaEnvelope } from 'react-icons/fa6';
 import { useState } from 'react';
-import LegalModal from '../components/credits';
+import LegalModal from '../credits/credits';
 
 export default function Footer() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,7 +37,7 @@ export default function Footer() {
             </div>
 
             <div className="flex bg-darkGreen py-1">
-                <div className="flex-1 ml-2">&copy;CES'EAT - 2024</div>
+                <div className="flex-1 ml-2">&copy;CES&apos;EAT - 2024</div>
                 <div>
                     <a
                         title="Consulter les mentions légales"
