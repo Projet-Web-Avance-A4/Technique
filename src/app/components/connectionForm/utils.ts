@@ -26,13 +26,14 @@ export const handleSubmit = async (
     setAlertType: (type: 'success' | 'error') => void
 ) => {
     e.preventDefault();
+    const appRole = process.env.NEXT_PUBLIC_APP;
     try {
         const response = await fetch('http://localhost:4000/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ mail, password })
+            body: JSON.stringify({ mail, password, appRole })
         });
 
         if (response.status === 200) {

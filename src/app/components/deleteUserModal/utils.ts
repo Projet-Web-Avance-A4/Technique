@@ -1,4 +1,4 @@
-import { generateNewAccessToken } from '@/app/account/utils';
+import { generateNewAccessToken } from '@/app/profil/utils';
 import { useState } from 'react';
 
 export const UsePassword = () => {

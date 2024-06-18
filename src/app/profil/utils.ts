@@ -4,10 +4,12 @@ import { ChangeEvent } from "react";
 
 export const generateNewAccessToken = (refreshToken: string) => {
     try {
-        const decoded = jwt.verify(refreshToken, 'refresh_secret_jwt');
+        const secretAccess = process.env.NEXT_PUBLIC_ACCESS_SECRET_KEY || '';
+        const secretRefresh = process.env.NEXT_PUBLIC_REFRESH_SECRET_KEY || '';
+        const decoded = jwt.verify(refreshToken, secretRefresh);
         if (typeof decoded === 'object' && decoded !== null) {
             const data: JwtPayload = decoded as jwt.JwtPayload;
-            const newAccessToken = jwt.sign({ ...data }, 'access_secret_jwt');
+            const newAccessToken = jwt.sign({ ...data }, secretAccess);
             localStorage.setItem('accessToken', newAccessToken);
             return newAccessToken;
         } else {
@@ -21,7 +23,9 @@ export const generateNewAccessToken = (refreshToken: string) => {
 
 export const verifyAndSetUser = (accessToken: string, setUser: (user: User) => void) => {
     try {
-        const verifiedData = jwt.verify(accessToken, 'access_secret_jwt');
+        const secret = process.env.NEXT_PUBLIC_ACCESS_SECRET_KEY || '';
+
+        const verifiedData = jwt.verify(accessToken, secret);
         if (typeof verifiedData !== 'string') {
             const data: JwtPayload = verifiedData;
             const userData: User = {
