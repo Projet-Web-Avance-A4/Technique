@@ -6,7 +6,7 @@ import { iCustomCard } from "@/app/interfaces/card";
 
 export default function CustomCard(props: iCustomCard) {
   return (
-    <Card className="m-6 w-full h-full flex flex-col justify-between">
+    <Card className="m-4 w-full h-full flex flex-col justify-between">
       <CardHeader className="pb-4 pt-2 px-4 flex-col items-center">
         <h4 className="font-bold text-large">{props.title}</h4>
         <p className="text-default-500">{props.description}</p>

@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { NextUIProvider } from '@nextui-org/system';
-import Header from '../components/header/header';
-import Footer from '../components/footer/footer';
 import LogsTable from '../components/logsTable/logsTable';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Button } from '@nextui-org/react';
@@ -62,8 +60,7 @@ const Logs: React.FC = () => {
     const maxPage = Math.ceil(logs.length / logsPerPage);
 
     return (
-        <NextUIProvider className="flex flex-col min-h-screen bg-beige">
-            <Header user={user} showMyAccount={true} showSponsor={false} />
+        <>
             <div className='container mx-auto mt-6 flex-grow'>
                 <h2 className="text-3xl font-bold mb-6 text-center text-black">Consultation des logs</h2>
                 <div className="logs-container">
@@ -87,8 +84,8 @@ const Logs: React.FC = () => {
                     Suivant
                 </Button>
             </div>
-            <Footer />
-        </NextUIProvider>
+
+        </>
     );
 };
 

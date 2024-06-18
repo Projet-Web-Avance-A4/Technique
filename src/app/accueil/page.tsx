@@ -1,22 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { NextUIProvider } from '@nextui-org/system';
-import Header from '../components/header/header';
-import Footer from '../components/footer/footer';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import CustomCard from '../components/customcard/customcard';
-
-interface User {
-    name: string;
-    surname: string;
-    street: string;
-    city: string;
-    postal_code: string;
-    phone: string;
-    mail: string;
-    role: string;
-}
+import { User } from '../interfaces/user';
 
 const Home: React.FC = () => {
 
@@ -44,35 +31,31 @@ const Home: React.FC = () => {
     }, []);
 
     return (
-        <NextUIProvider className="flex flex-col min-h-screen bg-beige">
-            <Header user={user} showMyAccount={true} showSponsor={false} />
-            <div className='container mx-auto mt-6 flex-grow'>
-                <h2 className="text-3xl font-bold mb-6 text-center text-black">Bienvenue {user?.name} !</h2>
-                <div className='flex justify-center'>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <CustomCard
-                            title="Logs"
-                            description="Accédez aux logs"
-                            href="/logs"
-                            btnText="Accéder"
-                        />
-                        <CustomCard
-                            title="Performances"
-                            description="Voir les performances"
-                            href="/performances"
-                            btnText="Accéder"
-                        />
-                        <CustomCard
-                            title="Composants"
-                            description="Gérer les composants"
-                            href="/gestion-des-composants"
-                            btnText="Accéder"
-                        />
-                    </div>
+        <div className='container mx-auto m-8'>
+            <h2 className="text-3xl font-bold mb-6 text-center text-black">Bienvenue {user?.name} !</h2>
+            <div className='flex justify-center'>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <CustomCard
+                        title="Logs"
+                        description="Accédez aux logs"
+                        href="/logs"
+                        btnText="Accéder"
+                    />
+                    <CustomCard
+                        title="Performances"
+                        description="Voir les performances"
+                        href="/performances"
+                        btnText="Accéder"
+                    />
+                    <CustomCard
+                        title="Composants"
+                        description="Gérer les composants"
+                        href="/gestion-des-composants"
+                        btnText="Accéder"
+                    />
                 </div>
             </div>
-            <Footer />
-        </NextUIProvider>
+        </div>
     );
 };
 
