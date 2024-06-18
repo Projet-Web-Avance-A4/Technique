@@ -1,13 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import CustomCard from '../components/customcard/customcard';
 import { User } from '../interfaces/user';
+import { useHeader } from '../hooks/useHeader';
 
 const Home: React.FC = () => {
 
-    const [user, setUser] = useState<User | null>(null);
+    const { user, setUser, setShowMyAccount, setShowSponsor, setShowStats } = useHeader();
+    const router = useRouter();
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
@@ -26,7 +29,12 @@ const Home: React.FC = () => {
                     role: data.role ?? ''
                 };
                 setUser(userData);
+                setShowMyAccount(true);
+                setShowSponsor(true);
+                setShowStats(true);
             }
+        } else {
+            router.push('/');
         }
     }, []);
 

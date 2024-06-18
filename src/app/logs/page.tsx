@@ -1,19 +1,21 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { NextUIProvider } from '@nextui-org/system';
+import { useRouter } from 'next/navigation';
 import LogsTable from '../components/logsTable/logsTable';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Button } from '@nextui-org/react';
 import { User } from '../interfaces/user';
 import { Log } from '../interfaces/log';
+import { useHeader } from '../hooks/useHeader';
 
 const Logs: React.FC = () => {
 
-    const [user, setUser] = useState<User | null>(null);
+    const { user, setUser, setShowMyAccount, setShowSponsor, setShowStats } = useHeader();
     const [logs, setLogs] = useState<Log[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const logsPerPage = 7;
+    const router = useRouter();
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
@@ -32,7 +34,12 @@ const Logs: React.FC = () => {
                     role: data.role ?? ''
                 };
                 setUser(userData);
+                setShowMyAccount(true);
+                setShowSponsor(true);
+                setShowStats(true);
             }
+        } else {
+            router.push('/');
         }
     }, []);
 
