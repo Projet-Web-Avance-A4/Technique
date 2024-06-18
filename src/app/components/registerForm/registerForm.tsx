@@ -150,16 +150,6 @@ const RegisterForm: React.FC<{ changeForm: () => void }> = (props) => {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
-                        <div className='col-start-2 col-span-4'>
-                            <Input
-                                className='text-black'
-                                label="Code Parrainage (Optionnel)"
-                                variant='bordered'
-                                size="md"
-                                value={id_sponsor}
-                                onChange={(e) => setIdSponsor(e.target.value)}
-                            />
-                        </div>
                         <Spacer y={1.5} />
                         <div className='col-start-3 col-end-5 justify-self-center'>
                             <Button type="submit" className='bg-beige shadow min-w-[150px]' isDisabled={isDisabled}>Créer le compte</Button>

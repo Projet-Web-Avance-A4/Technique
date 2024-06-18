@@ -65,13 +65,6 @@ export default function Header() {
                                     >
                                         Mon compte
                                     </DropdownItem>
-                                    <DropdownItem
-                                        key="sponsor"
-                                        description="Parrainer un ami"
-                                        href="/sponsor"
-                                    >
-                                        Parrainage
-                                    </DropdownItem>
                                 </DropdownSection>
                                 <DropdownSection title="Danger">
                                     <DropdownItem
