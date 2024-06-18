@@ -11,14 +11,12 @@ export default function PortalCard(props: iPortalCard) {
   const onRedirect = () => handleRedirect(props.href, props.port);
 
   return (
-    <NextUIProvider className="w-96">
-      <Card className="m-4">
-        <CardBody>
-          <Button onClick={onRedirect}>
-            <p>{props.btnText}</p>
-          </Button>
-        </CardBody>
-      </Card>
-    </NextUIProvider>
+    <Card className="m-4">
+      <CardBody>
+        <Button onClick={onRedirect}>
+          <p>{props.btnText}</p>
+        </Button>
+      </CardBody>
+    </Card>
   );
 }
