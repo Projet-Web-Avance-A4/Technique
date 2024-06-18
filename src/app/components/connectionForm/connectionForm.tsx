@@ -1,7 +1,6 @@
 import { Alert } from '@mui/material';
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardHeader, Input, Spacer } from '@nextui-org/react';
-import { NextUIProvider } from '@nextui-org/system';
 import React, { useState } from 'react';
 import { EyeSlashFilledIcon } from '../../../../public/icons/EyeSlashFilledIcon';
 import { EyeFilledIcon } from '../../../../public/icons/EyeFilledIcon';

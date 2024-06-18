@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, ChangeEvent } from "react";
+import { useRouter } from 'next/navigation';
 import { Input, Spacer } from "@nextui-org/react";
 import { Alert } from "@mui/material";
 import { User, fieldLabels } from "../interfaces/user";
@@ -20,12 +21,21 @@ export default function AccountInfo() {
     const [alertType, setAlertType] = useState<'success' | 'error'>('success');
     const [isDataDisabled, setIsDataDisabled] = useState(true);
     const [isPasswordDisabled, setIsPasswordDisabled] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
-        handleTokenVerification(setUser);
-        setShowMyAccount(true);
-        setShowSponsor(true);
-        setShowStats(true);
+        const getUser = async () => {
+            const token = await handleTokenVerification(setUser);
+            if (token) {
+                setShowMyAccount(true);
+                setShowSponsor(true);
+                setShowStats(true);
+            } else {
+                router.push('/');
+            }
+        }
+
+        getUser();
     }, []);
 
     useEffect(() => {
