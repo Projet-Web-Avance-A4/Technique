@@ -6,6 +6,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import CustomCard from '../components/customcard/customcard';
 import { User } from '../interfaces/user';
 import { useHeader } from '../hooks/useHeader';
+import NotificationNewLog from '../components/newLog/newLog';
 
 const Home: React.FC = () => {
 
@@ -39,6 +40,7 @@ const Home: React.FC = () => {
     }, []);
 
     return (
+        <>
         <div className='container mx-auto m-8'>
             <h2 className="text-3xl font-bold mb-6 text-center text-black">Bienvenue {user?.name} !</h2>
             <div className='flex justify-center'>
@@ -64,6 +66,8 @@ const Home: React.FC = () => {
                 </div>
             </div>
         </div>
+        <NotificationNewLog />
+        </>
     );
 };
 
